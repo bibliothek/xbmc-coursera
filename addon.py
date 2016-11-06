@@ -30,7 +30,7 @@ def index():
     try:
         classes = loadClasses(username, password)
     except requests.HTTPError as ex:
-        if ex.code != 401:
+        if not hasattr(ex, 'code') or ex.code != 401:
             raise ex
 
         plugin.notify(msg="Unable to login to Coursera")

@@ -44,6 +44,7 @@ def loadClasses(username, password):
     if cookies_raw is None:
         plugin.log.info("Logging in")
         cookies_raw = login(username, password)
+        plugin.log.info("Login complete")
         user_data['cookies'] = cookies_raw
         did_login = True
     else:
@@ -52,7 +53,7 @@ def loadClasses(username, password):
     try:
         classes = getClasses(cookies=cookies_raw)
     except requests.HTTPError as ex:
-        if ex.code not in [403, 401]:
+        if not hasattr(ex, 'code') or ex.code not in [403, 401]:
             raise ex
 
         if did_login:
